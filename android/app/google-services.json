@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1072179934221",
+    "firebase_url": "https://loja-virtual-f6128.firebaseio.com",
+    "project_id": "loja-virtual-f6128",
+    "storage_bucket": "loja-virtual-f6128.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072179934221:android:0a9ef8e7859a705eed1144",
+        "android_client_info": {
+          "package_name": "br.com.adriano.loja_vitual"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072179934221-1mii1djcfv8heqeg8vdiglgp2k5ce4o3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDWPB3J78NXxAmSiKMe1HJizsUleFuh3U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1072179934221-1mii1djcfv8heqeg8vdiglgp2k5ce4o3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1072179934221-0ktcg8pf2rb1objcekqrcpkpk6bpb569.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.adrianofreires.lojavirtal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
