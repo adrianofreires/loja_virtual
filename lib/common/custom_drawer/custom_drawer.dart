@@ -41,7 +41,7 @@ class CustomDrawer extends StatelessWidget {
                 page: 2,
               ),
               DrawerTile(
-                iconData: Icons.location_on,
+                iconData: Icons.store,
                 title: 'Lojas',
                 page: 3,
               ),
@@ -52,12 +52,12 @@ class CustomDrawer extends StatelessWidget {
                       children: <Widget>[
                         const Divider(),
                         DrawerTile(
-                          iconData: Icons.settings,
+                          iconData: Icons.people_alt_rounded,
                           title: 'Usuários',
                           page: 4,
                         ),
                         DrawerTile(
-                          iconData: Icons.settings,
+                          iconData: Icons.pending_actions,
                           title: 'Pedidos',
                           page: 5,
                         ),

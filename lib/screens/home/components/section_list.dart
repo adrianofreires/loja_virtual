@@ -12,7 +12,7 @@ class SectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -24,7 +24,7 @@ class SectionList extends StatelessWidget {
               itemBuilder: (_, index){
                 return ItemTile(section.items[index]);
               },
-              separatorBuilder: (_, __) => const SizedBox(width: 4,),
+              separatorBuilder: (_, __) => const SizedBox(width: 8,),
               itemCount: section.items.length,
             ),
           )

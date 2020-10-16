@@ -13,7 +13,7 @@ class SectionStaggered extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -28,8 +28,8 @@ class SectionStaggered extends StatelessWidget {
             },
             staggeredTileBuilder: (index) =>
                 StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
+            mainAxisSpacing: 6,
+            crossAxisSpacing: 6,
           )
         ],
       ),

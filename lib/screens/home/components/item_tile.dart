@@ -22,12 +22,15 @@ class ItemTile extends StatelessWidget {
           }
         }
       },
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: FadeInImage.memoryNetwork(
-          placeholder: kTransparentImage,
-          image: item.image,
-          fit: BoxFit.cover,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: FadeInImage.memoryNetwork(
+            placeholder: kTransparentImage,
+            image: item.image,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
