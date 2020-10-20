@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'models/product.dart';
 import 'screens/base/base_screen.dart';
@@ -36,9 +37,13 @@ class MyApp extends StatelessWidget {
           create: (_) => CartManager(),
           lazy: false,
           update: (_, userManager, cartManager) =>
-          cartManager..updateUser(userManager),
+              cartManager..updateUser(userManager),
         ),
-
+        ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
+          create: (_) => AdminUsersManager(),
+          lazy: true,
+          update: (_, userManager, adminUserManager) => adminUserManager..updateUser(userManager),
+        )
       ],
       child: MaterialApp(
         title: 'Loja do Adriano',
@@ -50,31 +55,20 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/base',
-        onGenerateRoute: (settings){
-          switch(settings.name){
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
             case '/login':
-              return MaterialPageRoute(
-                  builder: (_) => LoginScreen()
-              );
+              return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/signup':
-              return MaterialPageRoute(
-                  builder: (_) => SignUpScreen()
-              );
+              return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/product':
               return MaterialPageRoute(
-                  builder: (_) => ProductScreen(
-                      settings.arguments as Product
-                  )
-              );
+                  builder: (_) => ProductScreen(settings.arguments as Product));
             case '/cart':
-              return MaterialPageRoute(
-                  builder: (_) => CartScreen()
-              );
+              return MaterialPageRoute(builder: (_) => CartScreen());
             case '/base':
             default:
-              return MaterialPageRoute(
-                  builder: (_) => BaseScreen()
-              );
+              return MaterialPageRoute(builder: (_) => BaseScreen());
           }
         },
       ),
