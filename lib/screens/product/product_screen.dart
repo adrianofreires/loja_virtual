@@ -21,6 +21,22 @@ class ProductScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(product.name),
           centerTitle: true,
+          actions: <Widget>[
+            Consumer<UserManager>(
+              builder: (_, userManager, __) {
+                if (userManager.adminEnabled) {
+                  return IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/edit_product',
+                            arguments: product);
+                      });
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: ListView(
@@ -104,7 +120,9 @@ class ProductScreen extends StatelessWidget {
                             onPressed: product.selectedSize != null
                                 ? () {
                                     if (userManager.isLoggedIn) {
-                                      context.read<CartManager>().addToCart(product);
+                                      context
+                                          .read<CartManager>()
+                                          .addToCart(product);
                                       Navigator.of(context).pushNamed('/cart');
                                     } else {
                                       Navigator.of(context).pushNamed('/login');
