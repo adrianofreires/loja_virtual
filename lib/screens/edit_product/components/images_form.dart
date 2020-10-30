@@ -15,17 +15,18 @@ class ImagesForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormField<List<dynamic>>(
       initialValue: List.from(product.images),
-      validator: (images){
-        if(images.isEmpty)
-          return 'Insira ao menos uma imagem';
+      validator: (images) {
+        if (images.isEmpty) return 'Insira ao menos uma imagem';
         return null;
       },
+      onSaved: (images) => product.newImages = images,
       builder: (state) {
-        void onImageSelected(File file){
+        void onImageSelected(File file) {
           state.value.add(file);
           state.didChange(state.value);
           Navigator.pop(context);
         }
+
         return Column(
           children: [
             AspectRatio(
@@ -70,13 +71,13 @@ class ImagesForm extends StatelessWidget {
                             ? showModalBottomSheet(
                                 context: context,
                                 builder: (_) => ImageSourceSheet(
-                                  onImageSelected: onImageSelected,
-                                ))
+                                      onImageSelected: onImageSelected,
+                                    ))
                             : showCupertinoModalPopup(
                                 context: context,
                                 builder: (_) => ImageSourceSheet(
-                                  onImageSelected: onImageSelected,
-                                ));
+                                      onImageSelected: onImageSelected,
+                                    ));
                       },
                     ),
                   )),
@@ -87,15 +88,12 @@ class ImagesForm extends StatelessWidget {
                 autoplay: false,
               ),
             ),
-            if(state.hasError)
+            if (state.hasError)
               Container(
                 margin: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                 child: Text(
                   state.errorText,
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 16.0
-                  ),
+                  style: TextStyle(color: Colors.red, fontSize: 16.0),
                 ),
               )
           ],
