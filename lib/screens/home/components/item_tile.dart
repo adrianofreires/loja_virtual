@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/product_manager.dart';
 import 'package:loja_virtual/models/section_item.dart';
@@ -26,11 +27,12 @@ class ItemTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         child: AspectRatio(
           aspectRatio: 1,
-          child: FadeInImage.memoryNetwork(
+          child: item.image is String
+          ? FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
-            image: item.image,
+            image: item.image  as String,
             fit: BoxFit.cover,
-          ),
+          ) : Image.file(item.image as File, fit: BoxFit.cover,),
         ),
       ),
     );
