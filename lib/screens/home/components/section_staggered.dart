@@ -28,6 +28,7 @@ class SectionStaggered extends StatelessWidget {
                 return StaggeredGridView.countBuilder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 4,
                   itemCount: homeManager.editing
                       ? section.items.length + 1

@@ -34,6 +34,7 @@ class HomeManager extends ChangeNotifier {
     notifyListeners();
   }
 
+
   List<Section> get sections{
     if(editing)
       return _editingSections;
@@ -46,7 +47,15 @@ class HomeManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveEditing(){
+  Future<void> saveEditing() async {
+    bool valid = true;
+    for(final section in _editingSections){
+      if(!section.valid()) valid = false;
+    }
+    if(!valid) return;
+    for(final section in _editingSections){
+      await section.save();
+    }
     editing = false;
     notifyListeners();
   }

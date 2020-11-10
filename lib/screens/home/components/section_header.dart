@@ -9,32 +9,45 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeManager = context.watch<HomeManager>();
     final section = context.watch<Section>();
-    if(homeManager.editing){
-      return Row(
+    if (homeManager.editing) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: TextFormField(
-              initialValue: section.name,
-              onChanged: (text) => section.name = text,
-              decoration: const InputDecoration(
-                hintText: 'Título',
-                isDense: true,
-                border: InputBorder.none,
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  initialValue: section.name,
+                  onChanged: (text) => section.name = text,
+                  decoration: const InputDecoration(
+                    hintText: 'Título',
+                    isDense: true,
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                ),
               ),
-              style: TextStyle(
+              CustomIconButton(
+                iconData: Icons.remove_circle_outline_outlined,
                 color: Colors.white,
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
+                onTap: () {
+                  homeManager.removeSection(section);
+                },
+              ),
+            ],
+          ),
+          if (section.error != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                section.error,
+                style: TextStyle(color: Colors.red),
               ),
             ),
-          ),
-          CustomIconButton(
-            iconData: Icons.remove_circle_outline_outlined,
-            color: Colors.white,
-            onTap: (){
-              homeManager.removeSection(section);
-            },
-          ),
         ],
       );
     } else {
