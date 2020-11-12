@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
+import 'package:loja_virtual/screens/address/address_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
@@ -62,6 +63,8 @@ class MyApp extends StatelessWidget {
           switch (settings.name) {
             case '/login':
               return MaterialPageRoute(builder: (_) => LoginScreen());
+            case '/address':
+              return MaterialPageRoute(builder: (_) => AddressScreen());
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/edit_product':
