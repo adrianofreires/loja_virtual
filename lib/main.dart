@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
+import 'package:loja_virtual/models/cepaberto_address.dart';
 import 'package:loja_virtual/screens/address/address_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
+import 'package:loja_virtual/services/cepaberto_services.dart';
 import 'models/product.dart';
 import 'screens/base/base_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ import 'package:loja_virtual/models/home_manager.dart';
 
 void main() {
   runApp(MyApp());
+  CepAbertoServices().getAddressFromCep('19.470-000').then((address) => print(address));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,14 +42,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserManager, CartManager>(
           create: (_) => CartManager(),
           lazy: false,
-          update: (_, userManager, cartManager) =>
-              cartManager..updateUser(userManager),
+          update: (_, userManager, cartManager) => cartManager..updateUser(userManager),
         ),
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
           lazy: true,
-          update: (_, userManager, adminUserManager) =>
-              adminUserManager..updateUser(userManager),
+          update: (_, userManager, adminUserManager) => adminUserManager..updateUser(userManager),
         )
       ],
       child: MaterialApp(
@@ -73,8 +74,7 @@ class MyApp extends StatelessWidget {
                         settings.arguments as Product,
                       ));
             case '/product':
-              return MaterialPageRoute(
-                  builder: (_) => ProductScreen(settings.arguments as Product));
+              return MaterialPageRoute(builder: (_) => ProductScreen(settings.arguments as Product));
             case '/select_product':
               return MaterialPageRoute(builder: (_) => SelectProductScreen());
             case '/cart':
