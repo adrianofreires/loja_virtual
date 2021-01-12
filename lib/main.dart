@@ -19,7 +19,6 @@ import 'package:loja_virtual/models/home_manager.dart';
 
 void main() {
   runApp(MyApp());
-  CepAbertoServices().getAddressFromCep('19.470-000').then((address) => print(address));
 }
 
 class MyApp extends StatelessWidget {
