@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:loja_virtual/models/cart_product.dart';
 import 'package:loja_virtual/models/product.dart';
 import 'package:loja_virtual/models/user.dart';
@@ -5,8 +6,8 @@ import 'package:loja_virtual/models/user_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/services/cepaberto_services.dart';
-
-import 'address.dart';
+import 'package:loja_virtual/models/address.dart';
+import 'package:loja_virtual/screens/address/address_screen.dart';
 
 class CartManager extends ChangeNotifier {
   List<CartProduct> items = [];
@@ -14,6 +15,10 @@ class CartManager extends ChangeNotifier {
   User user;
   Address address;
   num productsPrice = 0.0;
+  num deliveryPrice;
+  num get totalPrice => productsPrice + (deliveryPrice ?? 0);
+
+  final Firestore firestore = Firestore.instance;
 
   void updateUser(UserManager userManager) {
     user = userManager.user;
@@ -79,6 +84,8 @@ class CartManager extends ChangeNotifier {
     return true;
   }
 
+  bool get isAddressValid => address != null && deliveryPrice != null;
+
   Future<void> getAddress(String cep) async {
     final cepAbertoService = CepAbertoServices();
     try {
@@ -99,5 +106,36 @@ class CartManager extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> setAddress(Address address) async {
+    this.address = address;
+    if (await calculateDelivery(address.latitude, address.longitude)) {
+      notifyListeners();
+    } else {
+      return Future.error('Endereço fora do raio de entrega');
+    }
+  }
+
+  Future<bool> calculateDelivery(double lat, double long) async {
+    final DocumentSnapshot doc = await firestore.document('auxiliar/delivery').get();
+    final latitude = doc.data['latitude'] as double;
+    final longitude = doc.data['longitude'] as double;
+    final maxKm = doc.data['maxKm'] as num;
+    final priceKm = doc.data['priceKm'] as num;
+    final basePrice = doc.data['basePrice'] as num;
+    double distance = await Geolocator().distanceBetween(latitude, longitude, lat, long);
+    distance /= 1000;
+    if (distance > maxKm) {
+      return false;
+    }
+    deliveryPrice = basePrice + distance * priceKm;
+    return true;
+  }
+
+  void removeAddress() {
+    address = null;
+    deliveryPrice = null;
+    notifyListeners();
   }
 }

@@ -23,8 +23,8 @@ class AddressCard extends StatelessWidget {
                     'Endereço de Entrega',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
                   ),
-                  CepInputField(),
-                  if (address.zipCode != null) AddressInputField(address),
+                  CepInputField(address),
+                  AddressInputField(address),
                 ],
               ),
             );
