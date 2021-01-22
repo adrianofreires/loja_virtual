@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
 import 'package:loja_virtual/models/cepaberto_address.dart';
 import 'package:loja_virtual/screens/address/address_screen.dart';
+import 'package:loja_virtual/screens/checkout/checkout_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
@@ -65,6 +66,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/address':
               return MaterialPageRoute(builder: (_) => AddressScreen());
+            case '/checkout':
+              return MaterialPageRoute(builder: (_) => CheckoutScreen());
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/edit_product':
@@ -77,7 +80,7 @@ class MyApp extends StatelessWidget {
             case '/select_product':
               return MaterialPageRoute(builder: (_) => SelectProductScreen());
             case '/cart':
-              return MaterialPageRoute(builder: (_) => CartScreen());
+              return MaterialPageRoute(builder: (_) => CartScreen(), settings: settings);
             case '/base':
             default:
               return MaterialPageRoute(builder: (_) => BaseScreen());

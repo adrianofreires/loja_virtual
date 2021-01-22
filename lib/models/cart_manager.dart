@@ -17,15 +17,24 @@ class CartManager extends ChangeNotifier {
   num productsPrice = 0.0;
   num deliveryPrice;
   num get totalPrice => productsPrice + (deliveryPrice ?? 0);
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   final Firestore firestore = Firestore.instance;
 
   void updateUser(UserManager userManager) {
     user = userManager.user;
+    productsPrice = 0.0;
     items.clear();
+    removeAddress();
 
     if (user != null) {
       _loadCartItems();
+      _loadUserAddress();
     }
   }
 
@@ -33,6 +42,13 @@ class CartManager extends ChangeNotifier {
     final QuerySnapshot cartSnap = await user.cartReference.getDocuments();
 
     items = cartSnap.documents.map((d) => CartProduct.fromDocument(d)..addListener(_onItemUpdated)).toList();
+  }
+
+  Future<void> _loadUserAddress() async {
+    if (user.address != null && await calculateDelivery(user.address.latitude, user.address.longitude)) {
+      address = user.address;
+      notifyListeners();
+    }
   }
 
   void addToCart(Product product) {
@@ -87,6 +103,7 @@ class CartManager extends ChangeNotifier {
   bool get isAddressValid => address != null && deliveryPrice != null;
 
   Future<void> getAddress(String cep) async {
+    loading = true;
     final cepAbertoService = CepAbertoServices();
     try {
       final cepAbertoAddress = await cepAbertoService.getAddressFromCep(cep);
@@ -101,18 +118,22 @@ class CartManager extends ChangeNotifier {
           latitude: cepAbertoAddress.latitude,
           longitude: cepAbertoAddress.longitude,
         );
-        notifyListeners();
       }
+      loading = false;
     } catch (e) {
-      debugPrint(e.toString());
+      loading = false;
+      return Future.error('CEP Inválido');
     }
   }
 
   Future<void> setAddress(Address address) async {
+    loading = true;
     this.address = address;
     if (await calculateDelivery(address.latitude, address.longitude)) {
-      notifyListeners();
+      user.setAddress(address);
+      loading = false;
     } else {
+      loading = false;
       return Future.error('Endereço fora do raio de entrega');
     }
   }
