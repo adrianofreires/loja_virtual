@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
-import 'package:loja_virtual/models/cepaberto_address.dart';
+import 'package:loja_virtual/models/order.dart';
+import 'package:loja_virtual/models/orders_manager.dart';
 import 'package:loja_virtual/screens/address/address_screen.dart';
 import 'package:loja_virtual/screens/checkout/checkout_screen.dart';
+import 'package:loja_virtual/screens/confirmation/confirmation_screen.dart';
 import 'package:loja_virtual/screens/edit_product/edit_product_screen.dart';
 import 'package:loja_virtual/screens/product/product_screen.dart';
 import 'package:loja_virtual/screens/select_product/select_product_screen.dart';
-import 'package:loja_virtual/services/cepaberto_services.dart';
 import 'models/product.dart';
 import 'screens/base/base_screen.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,10 @@ class MyApp extends StatelessWidget {
           lazy: false,
           update: (_, userManager, cartManager) => cartManager..updateUser(userManager),
         ),
+        ChangeNotifierProxyProvider<UserManager, OrdersManager>(
+            create: (_) => OrdersManager(),
+            lazy: false,
+            update: (_, userManager, ordersManager) => ordersManager..updateUser(userManager.user)),
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
           lazy: true,
@@ -77,13 +82,15 @@ class MyApp extends StatelessWidget {
                       ));
             case '/product':
               return MaterialPageRoute(builder: (_) => ProductScreen(settings.arguments as Product));
+            case '/confirmation':
+              return MaterialPageRoute(builder: (_) => ConfirmationScreen(settings.arguments as Order));
             case '/select_product':
               return MaterialPageRoute(builder: (_) => SelectProductScreen());
             case '/cart':
               return MaterialPageRoute(builder: (_) => CartScreen(), settings: settings);
             case '/base':
             default:
-              return MaterialPageRoute(builder: (_) => BaseScreen());
+              return MaterialPageRoute(builder: (_) => BaseScreen(), settings: settings);
           }
         },
       ),
