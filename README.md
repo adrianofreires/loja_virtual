@@ -1,6 +1,6 @@
-# libraria_news
+# loja_virtual
 
-Aplicativo de notícias em Libras
+A new Flutter application.
 
 ## Getting Started
 

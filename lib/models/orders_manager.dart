@@ -13,6 +13,7 @@ class OrdersManager extends ChangeNotifier {
 
   void updateUser(User user) {
     this.user = user;
+    orders.clear();
     _subscription?.cancel();
     if (user != null) {
       _listenToOrders();

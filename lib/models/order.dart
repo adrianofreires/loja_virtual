@@ -3,6 +3,8 @@ import 'package:loja_virtual/models/address.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/models/cart_product.dart';
 
+enum Status { canceled, preparing, transporting, delivery }
+
 class Order {
   String orderID;
   List<CartProduct> items;
@@ -10,6 +12,7 @@ class Order {
   String userID;
   Address address;
   Timestamp date;
+  Status status;
   String get formatedID => '#${orderID.padLeft(6, '0')}';
 
   final Firestore firestore = Firestore.instance;
@@ -19,6 +22,7 @@ class Order {
     price = cartManager.totalPrice;
     userID = cartManager.user.id;
     address = cartManager.address;
+    status = Status.preparing;
   }
 
   Order.fromDocument(DocumentSnapshot doc) {
@@ -28,6 +32,7 @@ class Order {
     userID = doc.data['user'] as String;
     address = Address.fromMap(doc.data['address'] as Map<String, dynamic>);
     date = doc.data['date'] as Timestamp;
+    status = Status.values[doc.data['status'] as int];
   }
 
   Future<void> save() async {
@@ -36,7 +41,30 @@ class Order {
       'price': price,
       'user': userID,
       'address': address.toMap(),
+      'status': status.index,
+      'date': Timestamp.now(),
     });
+  }
+
+  String get statusText => getStatusText(status);
+
+  static String getStatusText(Status status) {
+    switch (status) {
+      case Status.canceled:
+        return 'Cancelado';
+        break;
+      case Status.preparing:
+        return 'Em preparação';
+        break;
+      case Status.transporting:
+        return 'Em transporte';
+        break;
+      case Status.delivery:
+        return 'Entregue';
+        break;
+      default:
+        return '';
+    }
   }
 
   @override
