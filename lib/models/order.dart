@@ -16,6 +16,7 @@ class Order {
   String get formatedID => '#${orderID.padLeft(6, '0')}';
 
   final Firestore firestore = Firestore.instance;
+  DocumentReference get firestoreRef => firestore.collection('orders').document(orderID);
 
   Order.fromCartManager(CartManager cartManager) {
     items = List.from(cartManager.items);
@@ -46,6 +47,10 @@ class Order {
     });
   }
 
+  void updateFromDocument(DocumentSnapshot document) {
+    status = Status.values[document.data['status'] as int];
+  }
+
   String get statusText => getStatusText(status);
 
   static String getStatusText(Status status) {
@@ -65,6 +70,29 @@ class Order {
       default:
         return '';
     }
+  }
+
+  Function() get back {
+    return (status.index >= Status.transporting.index)
+        ? () {
+            status = Status.values[status.index - 1];
+            firestoreRef.updateData({'status': status.index});
+          }
+        : null;
+  }
+
+  Function() get advance {
+    return (status.index <= Status.transporting.index)
+        ? () {
+            status = Status.values[status.index + 1];
+            firestoreRef.updateData({'status': status.index});
+          }
+        : null;
+  }
+
+  void cancel() {
+    status = Status.canceled;
+    firestoreRef.updateData({'status': status.index});
   }
 
   @override

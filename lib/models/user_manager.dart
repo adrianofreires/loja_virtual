@@ -23,8 +23,7 @@ class UserManager extends ChangeNotifier {
   Future<void> signIn({User user, Function onFail, Function onSuccess}) async {
     loading = true;
     try {
-      final AuthResult result = await auth.signInWithEmailAndPassword(
-          email: user.email, password: user.password);
+      final AuthResult result = await auth.signInWithEmailAndPassword(email: user.email, password: user.password);
       await _loadCurrentUser(firebaseUser: result.user);
 
       onSuccess();
@@ -37,8 +36,7 @@ class UserManager extends ChangeNotifier {
   Future<void> signUp({User user, Function onFail, Function onSuccess}) async {
     loading = true;
     try {
-      final AuthResult result = await auth.createUserWithEmailAndPassword(
-          email: user.email, password: user.password);
+      final AuthResult result = await auth.createUserWithEmailAndPassword(email: user.email, password: user.password);
 
       user.id = result.user.uid;
       this.user = user;
@@ -63,14 +61,17 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void recoverPass(String email) {
+    auth.sendPasswordResetEmail(email: email);
+    notifyListeners();
+  }
+
   Future<void> _loadCurrentUser({FirebaseUser firebaseUser}) async {
     final FirebaseUser currentUser = firebaseUser ?? await auth.currentUser();
     if (currentUser != null) {
-      final DocumentSnapshot docUser =
-          await firestore.collection('users').document(currentUser.uid).get();
+      final DocumentSnapshot docUser = await firestore.collection('users').document(currentUser.uid).get();
       user = User.fromDocument(docUser);
-      final docAdmin =
-          await firestore.collection('admins').document(user.id).get();
+      final docAdmin = await firestore.collection('admins').document(user.id).get();
       if (docAdmin.exists) {
         user.admin = true;
       }

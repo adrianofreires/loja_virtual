@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/common/cancel_order_dialog.dart';
+import 'package:loja_virtual/common/export_address_dialog.dart';
 import 'package:loja_virtual/models/order.dart';
 import 'package:loja_virtual/screens/orders/components/order_product_tile.dart';
 
@@ -52,6 +54,55 @@ class OrderTile extends StatelessWidget {
               return OrderProductTile(e);
             }).toList(),
           ),
+          if (showControls && order.status != Status.canceled)
+            SizedBox(
+              height: 60,
+              child: Row(
+                children: [
+                  FlatButton(
+                    onPressed: () {
+                      showDialog(context: context, builder: (_) => CancelOrderDialog(order));
+                    },
+                    child: Column(
+                      children: [
+                        Icon(Icons.cancel_outlined),
+                        Text('Cancelar'),
+                      ],
+                    ),
+                    textColor: Colors.red,
+                  ),
+                  FlatButton(
+                    onPressed: order.back,
+                    child: Column(
+                      children: [
+                        Icon(Icons.arrow_back),
+                        Text('Retroceder'),
+                      ],
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: order.advance,
+                    child: Column(
+                      children: [
+                        Icon(Icons.arrow_forward),
+                        Text('Avançar'),
+                      ],
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      showDialog(context: context, builder: (_) => ExportAddressDialog(order.address));
+                    },
+                    child: Column(
+                      children: [
+                        Icon(Icons.mail_outlined),
+                        Text('Endereço'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

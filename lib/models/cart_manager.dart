@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/services/cepaberto_services.dart';
 import 'package:loja_virtual/models/address.dart';
-import 'package:loja_virtual/screens/address/address_screen.dart';
 
 class CartManager extends ChangeNotifier {
   List<CartProduct> items = [];

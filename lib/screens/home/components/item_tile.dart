@@ -7,7 +7,6 @@ import 'package:loja_virtual/models/section.dart';
 import 'package:loja_virtual/models/section_item.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:provider/provider.dart';
 
 class ItemTile extends StatelessWidget {
   const ItemTile(this.item);
@@ -20,8 +19,7 @@ class ItemTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (item.product != null) {
-          final product =
-              context.read<ProductManager>().findProductById(item.product);
+          final product = context.read<ProductManager>().findProductById(item.product);
           if (product != null) {
             Navigator.of(context).pushNamed('/product', arguments: product);
           }
@@ -32,9 +30,7 @@ class ItemTile extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (_) {
-                    final product = context
-                        .read<ProductManager>()
-                        .findProductById(item.product);
+                    final product = context.read<ProductManager>().findProductById(item.product);
                     return AlertDialog(
                       title: const Text('Editar Anúncio'),
                       content: product != null
@@ -42,8 +38,7 @@ class ItemTile extends StatelessWidget {
                               contentPadding: EdgeInsets.zero,
                               leading: Image.network(product.images.first),
                               title: Text(product.name),
-                              subtitle: Text(
-                                  'R\$ ${product.basePrice.toStringAsFixed(2)}'),
+                              subtitle: Text('R\$ ${product.basePrice.toStringAsFixed(2)}'),
                             )
                           : null,
                       actions: <Widget>[
@@ -63,14 +58,12 @@ class ItemTile extends StatelessWidget {
                               item.product = null;
                             } else {
                               final Product product =
-                                  await Navigator.of(context)
-                                      .pushNamed('/select_product') as Product;
+                                  await Navigator.of(context).pushNamed('/select_product') as Product;
                               item.product = product?.id;
                             }
                             Navigator.of(context).pop();
                           },
-                          child: Text(
-                              product != null ? 'Desvincular' : 'Vincular'),
+                          child: Text(product != null ? 'Desvincular' : 'Vincular'),
                         ),
                       ],
                     );
