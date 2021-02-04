@@ -24,6 +24,16 @@ class EditProductScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(editing ? 'Criar Anúncio' : 'Editar Produto'),
           centerTitle: true,
+          actions: [
+            if (editing)
+              IconButton(
+                icon: Icon(Icons.delete_forever_outlined),
+                onPressed: () {
+                  context.read<ProductManager>().delete(product);
+                  Navigator.of(context).pop();
+                },
+              ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: Form(
@@ -66,17 +76,13 @@ class EditProductScreen extends StatelessWidget {
                     ),
                     Text(
                       'R\$',
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: primaryColor, fontSize: 22.0, fontWeight: FontWeight.bold),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 8),
                       child: Text(
                         'Descrição',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
                     TextFormField(
@@ -90,8 +96,7 @@ class EditProductScreen extends StatelessWidget {
                       ),
                       maxLines: null,
                       validator: (descricao) {
-                        if (descricao.length < 10)
-                          return 'Descrição muito curta';
+                        if (descricao.length < 10) return 'Descrição muito curta';
                         return null;
                       },
                       onSaved: (desc) => product.description = desc,
@@ -122,8 +127,7 @@ class EditProductScreen extends StatelessWidget {
                             disabledColor: primaryColor.withAlpha(100),
                             child: product.loading
                                 ? CircularProgressIndicator(
-                                    valueColor:
-                                        AlwaysStoppedAnimation(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation(Colors.white),
                                   )
                                 : Text(
                                     'Salvar',

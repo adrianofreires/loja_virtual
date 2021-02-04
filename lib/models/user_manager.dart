@@ -66,6 +66,8 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void facebookLogin() {}
+
   Future<void> _loadCurrentUser({FirebaseUser firebaseUser}) async {
     final FirebaseUser currentUser = firebaseUser ?? await auth.currentUser();
     if (currentUser != null) {

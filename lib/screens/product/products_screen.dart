@@ -22,8 +22,7 @@ class ProductsScreen extends StatelessWidget {
                   return GestureDetector(
                     onTap: () async {
                       final search = await showDialog<String>(
-                          context: context,
-                          builder: (_) => SearchDialog(productManager.search));
+                          context: context, builder: (_) => SearchDialog(productManager.search));
                       if (search != null) {
                         productManager.search = search;
                       }
@@ -48,9 +47,8 @@ class ProductsScreen extends StatelessWidget {
                 return IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () async {
-                    final search = await showDialog<String>(
-                        context: context,
-                        builder: (_) => SearchDialog(productManager.search));
+                    final search =
+                        await showDialog<String>(context: context, builder: (_) => SearchDialog(productManager.search));
                     if (search != null) {
                       productManager.search = search;
                     }
@@ -85,7 +83,6 @@ class ProductsScreen extends StatelessWidget {
         builder: (_, productManager, __) {
           final filteredProducts = productManager.filteredProducts;
           return ListView.builder(
-              padding: const EdgeInsets.all(4),
               itemCount: filteredProducts.length,
               itemBuilder: (_, index) {
                 return ProductListTile(filteredProducts[index]);

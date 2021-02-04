@@ -24,12 +24,11 @@ class ProductScreen extends StatelessWidget {
           actions: <Widget>[
             Consumer<UserManager>(
               builder: (_, userManager, __) {
-                if (userManager.adminEnabled) {
+                if (userManager.adminEnabled && !product.deleted) {
                   return IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/edit_product',
-                            arguments: product);
+                        Navigator.pushNamed(context, '/edit_product', arguments: product);
                       });
                 } else {
                   return Container();
@@ -85,29 +84,37 @@ class ProductScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: Text(
                       'Descrição',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ),
                   Text(
                     product.description,
                     style: const TextStyle(fontSize: 16),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 8),
-                    child: Text(
-                      'Tamanhos',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  if (product.deleted)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      child: Text(
+                        'Indisponível',
+                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500, color: Colors.red),
+                      ),
+                    )
+                  else ...[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      child: Text(
+                        'Tamanhos',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: product.sizes.map((s) {
-                      return SizeWidget(size: s);
-                    }).toList(),
-                  ),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: product.sizes.map((s) {
+                        return SizeWidget(size: s);
+                      }).toList(),
+                    ),
+                  ],
                   const SizedBox(
                     height: 20,
                   ),
@@ -120,9 +127,7 @@ class ProductScreen extends StatelessWidget {
                             onPressed: product.selectedSize != null
                                 ? () {
                                     if (userManager.isLoggedIn) {
-                                      context
-                                          .read<CartManager>()
-                                          .addToCart(product);
+                                      context.read<CartManager>().addToCart(product);
                                       Navigator.of(context).pushNamed('/cart');
                                     } else {
                                       Navigator.of(context).pushNamed('/login');
@@ -132,9 +137,7 @@ class ProductScreen extends StatelessWidget {
                             color: primaryColor,
                             textColor: Colors.white,
                             child: Text(
-                              userManager.isLoggedIn
-                                  ? 'Adicionar ao Carrinho'
-                                  : 'Entre para Comprar',
+                              userManager.isLoggedIn ? 'Adicionar ao Carrinho' : 'Entre para Comprar',
                               style: const TextStyle(fontSize: 18),
                             ),
                           ),

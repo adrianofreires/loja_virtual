@@ -15,9 +15,7 @@ class Section extends ChangeNotifier {
     id = document.documentID;
     name = document.data['name'] as String;
     type = document.data['type'] as String;
-    items = (document.data['items'] as List)
-        .map((i) => SectionItem.fromMap(i as Map<String, dynamic>))
-        .toList();
+    items = (document.data['items'] as List).map((i) => SectionItem.fromMap(i as Map<String, dynamic>)).toList();
   }
 
   String name;
@@ -66,35 +64,33 @@ class Section extends ChangeNotifier {
     }
     for (final item in items) {
       if (item.image is File) {
-        final StorageUploadTask task =
-            storageRef.child(Uuid().v1()).putFile(item.image as File);
+        final StorageUploadTask task = storageRef.child(Uuid().v1()).putFile(item.image as File);
         final StorageTaskSnapshot snapshot = await task.onComplete;
         final String url = await snapshot.ref.getDownloadURL() as String;
         item.image = url;
       }
     }
     for (final original in originalItems) {
-      if (!items.contains(original)) {
+      if (!items.contains(original) && (original.image as String).contains('firebase')) {
         try {
-          final ref =
-              await storage.getReferenceFromUrl(original.image as String);
+          final ref = await storage.getReferenceFromUrl(original.image as String);
           await ref.delete();
         } catch (e) {}
       }
     }
-    final Map<String, dynamic> itemsData = {
-      'items': items.map((e) => e.toMap()).toList()
-    };
+    final Map<String, dynamic> itemsData = {'items': items.map((e) => e.toMap()).toList()};
     await firestoreRef.updateData(itemsData);
   }
 
   Future<void> delete() async {
     await firestoreRef.delete();
     for (final item in items) {
-      try {
-        final ref = await storage.getReferenceFromUrl(item.image as String);
-        await ref.delete();
-      } catch (e) {}
+      if ((item.image as String).contains('firebase')) {
+        try {
+          final ref = await storage.getReferenceFromUrl(item.image as String);
+          await ref.delete();
+        } catch (e) {}
+      }
     }
   }
 
