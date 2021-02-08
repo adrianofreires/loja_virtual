@@ -4,6 +4,7 @@ import 'package:loja_virtual/models/page_manager.dart';
 import 'package:loja_virtual/screens/admin_orders/admin_orders_screen.dart';
 import 'package:loja_virtual/screens/admin_users/admin_users_screen.dart';
 import 'package:loja_virtual/screens/orders/orders_screen.dart';
+import 'package:loja_virtual/screens/stores/stores_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:loja_virtual/screens/product/products_screen.dart';
 import 'package:loja_virtual/screens/home/home_screen.dart';
@@ -30,12 +31,7 @@ class _BaseScreenState extends State<BaseScreen> {
               HomeScreen(),
               ProductsScreen(),
               OrdersScreen(),
-              Scaffold(
-                drawer: CustomDrawer(),
-                appBar: AppBar(
-                  title: const Text('Home4'),
-                ),
-              ),
+              StoresScreen(),
               if (userManager.adminEnabled) ...[
                 AdminUsersScreen(),
                 AdminOrdersScreen(),

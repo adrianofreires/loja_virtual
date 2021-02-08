@@ -40,6 +40,11 @@ class LoginScreen extends StatelessWidget {
             key: formKey,
             child: Consumer<UserManager>(
                 builder: (_, userManager, child) {
+                  if (userManager.loadingFace) {
+                    return CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.blue),
+                    );
+                  }
                   return ListView(
                     padding: const EdgeInsets.all(16),
                     shrinkWrap: true,
@@ -103,13 +108,16 @@ class LoginScreen extends StatelessWidget {
                                 style: TextStyle(fontSize: 15),
                               ),
                       ),
-                      SignInButton(
-                        Buttons.Facebook,
-                        text: 'Entrar com Facebook',
-                        onPressed: () {
-                          userManager.facebookLogin();
-                        },
-                      ),
+                      SignInButton(Buttons.Facebook, text: 'Entrar com Facebook', onPressed: () {
+                        userManager.facebookLogin(onFail: (e) {
+                          scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text('Falha ao entrar: $e'),
+                            backgroundColor: Colors.red,
+                          ));
+                        }, onSuccess: () {
+                          Navigator.of(context).pop();
+                        });
+                      }),
                     ],
                   );
                 },
