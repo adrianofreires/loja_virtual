@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/admin_orders_manager.dart';
 import 'package:loja_virtual/models/admin_users_manager.dart';
@@ -21,7 +22,7 @@ import 'package:loja_virtual/models/cart_manager.dart';
 import 'package:loja_virtual/screens/cart/cart_screen.dart';
 import 'package:loja_virtual/models/home_manager.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 

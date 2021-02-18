@@ -4,56 +4,35 @@
 //
 // class CreditCardFlag extends StatelessWidget {
 //   final String flagCard;
+//   final double ccIconSize = 50.0;
 //   CreditCardFlag({this.flagCard});
-//
-//   Function showFlag(){
-//     double ccIconSize = 50.0;
-//     Icon icon;
-//     switch (detectCCType(flagCard)) {
-//       case CreditCardType.visa:
-//         icon = Icon(
-//           FontAwesomeIcons.ccVisa,
-//           size: ccIconSize,
-//           color: Color(0xffffffff),
-//         );
-//         break;
-//
-//       case CreditCardType.amex:
-//         icon = Icon(
-//           FontAwesomeIcons.ccAmex,
-//           size: ccIconSize,
-//           color: Color(0xffffffff),
-//         );
-//         break;
-//
-//       case CreditCardType.mastercard:
-//         icon = Icon(
-//           FontAwesomeIcons.ccMastercard,
-//           size: ccIconSize,
-//           color: Color(0xffffffff),
-//         );
-//         break;
-//
-//       case CreditCardType.discover:
-//         icon = Icon(
-//           FontAwesomeIcons.ccDiscover,
-//           size: ccIconSize,
-//           color: Color(0xffffffff),
-//         );
-//         break;
-//
-//       default:
-//         icon = Icon(
-//           FontAwesomeIcons.ccVisa,
-//           size: ccIconSize,
-//           color: Color(0x00000000),
-//         );
-//     }
-//   }
 //
 //   @override
 //   Widget build(BuildContext context) {
-//   return showFlag;
-//   }
+//     IconData iconData;
+//     switch (detectCCType(flagCard)) {
+//       case CreditCardType.visa:
+//         iconData = FontAwesomeIcons.ccVisa;
+//         break;
 //
+//       case CreditCardType.amex:
+//         iconData = FontAwesomeIcons.ccAmex;
+//         break;
+//
+//       case CreditCardType.mastercard:
+//         iconData = FontAwesomeIcons.ccMastercard;
+//         break;
+//
+//       case CreditCardType.discover:
+//         iconData = FontAwesomeIcons.ccDiscover;
+//         break;
+//
+//       default:
+//         iconData = FontAwesomeIcons.ccVisa;
+//     }
+//     return Icon(
+//       iconData,
+//       size: ccIconSize,
+//     );
+//   }
 // }
