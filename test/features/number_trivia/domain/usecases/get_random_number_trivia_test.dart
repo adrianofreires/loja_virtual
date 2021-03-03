@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tdd_clean_architecture/core/usecases/usecase.dart';
 import 'package:tdd_clean_architecture/features/number_trivia/domain/entities/number_trivia.dart';
