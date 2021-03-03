@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/models/cart_manager.dart';
+import 'package:loja_virtual/models/credit_card.dart';
 import 'package:loja_virtual/models/order.dart';
 import 'package:loja_virtual/models/product.dart';
+import 'package:loja_virtual/services/cielo_payment.dart';
 
 class CheckoutManager extends ChangeNotifier {
   CartManager cartManager;
@@ -17,13 +19,31 @@ class CheckoutManager extends ChangeNotifier {
   }
 
   final Firestore firestore = Firestore.instance;
+  final CieloPayment cieloPayment = CieloPayment();
 
   void updateCart(CartManager cartManager) {
     this.cartManager = cartManager;
   }
 
-  Future<void> checkout({Function onStockFail, Function onSuccess}) async {
+  Future<void> checkout({CreditCard creditCard, Function onStockFail, Function onSuccess, Function onPayFail}) async {
     loading = true;
+    print(creditCard.toJson());
+    final orderID = await _getOrderID();
+
+    String payID;
+    try {
+      payID = await cieloPayment.authorize(
+        creditCard: creditCard,
+        price: cartManager.totalPrice,
+        orderID: orderID.toString(),
+        user: cartManager.user,
+      );
+      debugPrint('success $payID');
+    } catch (e) {
+      onPayFail(e);
+      loading = false;
+      return;
+    }
     try {
       await _decrementStock();
     } catch (e) {
@@ -31,11 +51,19 @@ class CheckoutManager extends ChangeNotifier {
       loading = false;
       return;
     }
-    //TODO: Processar pagamento
 
-    final orderID = await _getOrderID();
+    try {
+      await cieloPayment.capture(payID);
+      print('captura com sucesso');
+    } catch (e) {
+      onPayFail(e);
+      loading = false;
+      return;
+    }
+
     final order = Order.fromCartManager(cartManager);
     order.orderID = orderID.toString();
+    order.payID = payID;
 
     await order.save();
     cartManager.clear();

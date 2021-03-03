@@ -57,51 +57,54 @@ class OrderTile extends StatelessWidget {
           if (showControls && order.status != Status.canceled)
             SizedBox(
               height: 60,
-              child: Row(
-                children: [
-                  FlatButton(
-                    onPressed: () {
-                      showDialog(context: context, builder: (_) => CancelOrderDialog(order));
-                    },
-                    child: Column(
-                      children: [
-                        Icon(Icons.cancel_outlined),
-                        Text('Cancelar'),
-                      ],
+              child: Wrap(direction: Axis.vertical, children: [
+                Row(
+                  children: [
+                    FlatButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context, barrierDismissible: false, builder: (_) => CancelOrderDialog(order));
+                      },
+                      child: Column(
+                        children: [
+                          Icon(Icons.cancel_outlined),
+                          Text('Cancelar'),
+                        ],
+                      ),
+                      textColor: Colors.red,
                     ),
-                    textColor: Colors.red,
-                  ),
-                  FlatButton(
-                    onPressed: order.back,
-                    child: Column(
-                      children: [
-                        Icon(Icons.arrow_back),
-                        Text('Retroceder'),
-                      ],
+                    FlatButton(
+                      onPressed: order.back,
+                      child: Column(
+                        children: [
+                          Icon(Icons.arrow_back),
+                          Text('Retroceder'),
+                        ],
+                      ),
                     ),
-                  ),
-                  FlatButton(
-                    onPressed: order.advance,
-                    child: Column(
-                      children: [
-                        Icon(Icons.arrow_forward),
-                        Text('Avançar'),
-                      ],
+                    FlatButton(
+                      onPressed: order.advance,
+                      child: Column(
+                        children: [
+                          Icon(Icons.arrow_forward),
+                          Text('Avançar'),
+                        ],
+                      ),
                     ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      showDialog(context: context, builder: (_) => ExportAddressDialog(order.address));
-                    },
-                    child: Column(
-                      children: [
-                        Icon(Icons.mail_outlined),
-                        Text('Endereço'),
-                      ],
+                    FlatButton(
+                      onPressed: () {
+                        showDialog(context: context, builder: (_) => ExportAddressDialog(order.address));
+                      },
+                      child: Column(
+                        children: [
+                          Icon(Icons.mail_outlined),
+                          Text('Endereço'),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ]),
             ),
         ],
       ),
