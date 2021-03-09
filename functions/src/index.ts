@@ -304,7 +304,20 @@ export const helloWorld = functions.https.onCall((data, context) => {
     return {"success": snapshot.id};
  });
 
- export const onNewOrder = functions.firestore.document("/orders/{orderID}").onCreate((snapshot, context) => {
+ export const onNewOrder = functions.firestore.document("/orders/{orderID}").onCreate( async (snapshot, context) => {
     const orderID = context.params.orderID;
-    console.log(orderID);
+    const querySnapshot = await admin.firestore().collection("admins").get();
+    const admins = querySnapshot.docs.map(doc => doc.id);
+    let adminsTokens: string[] = [];
+    for(let i=0; i<admins.length; i++){
+        const tokensAdmin: string[] = await getDeviceTokens(admins[i]);
+        adminsTokens = adminsTokens.concat(tokensAdmin);
+    }
+    console.log(orderID, adminsTokens);
  });
+
+ async function getDeviceTokens(uid: string) {
+     const querySnapshot = await admin.firestore().collection("users").doc(uid).collection("tokens").get();
+     const tokens = querySnapshot.docs.map(doc => doc.id);
+     return tokens;
+ }
