@@ -313,11 +313,48 @@ export const helloWorld = functions.https.onCall((data, context) => {
         const tokensAdmin: string[] = await getDeviceTokens(admins[i]);
         adminsTokens = adminsTokens.concat(tokensAdmin);
     }
-    console.log(orderID, adminsTokens);
+    await sendPushFCM(
+        adminsTokens,
+        'Novo Pedido',
+        'Nova venda realizada. Pedido: ' + orderID
+    );
+ });
+const orderStatus = new Map([
+    [0, "Cancelado"],
+    [1, "Em separação"],
+    [2, "Em Transporte"],
+    [3, "Entregue"]
+])
+ export const orderStatusChanged = functions.firestore.document("/order/{orderID}").onUpdate(async (snapshot, context) => {
+     const beforeStatus = snapshot.before.data().status;
+     const afterStatus = snapshot.after.data().status;
+
+     if(beforeStatus !== afterStatus ){
+         const tokensUser = await getDeviceTokens(snapshot.after.data().user);
+         await sendPushFCM(
+             tokensUser,
+             'Pedido: ' + context.params.orderID,
+             'Status atualizado para: ' + orderStatus.get(afterStatus),
+         )
+     }
  });
 
  async function getDeviceTokens(uid: string) {
      const querySnapshot = await admin.firestore().collection("users").doc(uid).collection("tokens").get();
      const tokens = querySnapshot.docs.map(doc => doc.id);
      return tokens;
+ }
+
+ async function sendPushFCM(tokens: string[], title: string, message: string){
+     if(tokens.length > 0){
+         const payload = {
+            notification : {
+                title: title,
+                body: message,
+                click_action: 'FLUTTER_NOTIFICATION_CLICK'
+            }
+         };
+         return admin.messaging().sendToDevice(tokens, payload);
+     }
+     return;
  }
